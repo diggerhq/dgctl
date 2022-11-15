@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "dgctl"
+version = "0.1.0"
+description = "digger.dev client"
+authors = ["Mohammed Habib <mo@digger.dev>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+click = "^8.1.3"
+
+[tool.poetry.dev-dependencies]
+flake8 = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-mock = "*"
+pytest-cov = "*"
+black = "*"
+parameterized = "*"
+pyfakefs = "*"
+
+[tool.black]
+exclude = '''
+/(
+  | migrations
+)/
+
+'''
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
