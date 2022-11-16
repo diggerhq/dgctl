@@ -31,7 +31,7 @@ class InitCommand:
             raise RuntimeError("Failed to create bucket")
 
         try:
-            self.dump_backed_tf()
+            self.dump_backend_tf()
         except:
             raise RuntimeError("Failed to dump backend file")
 
@@ -41,7 +41,7 @@ class InitCommand:
 
         bucket_create(self.bucket_name)
 
-    def dump_backed_tf(self):
+    def dump_backend_tf(self):
         with open(self.backend_tf, "w") as f:
             f.write(
                 f"""
