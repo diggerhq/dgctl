@@ -2,7 +2,6 @@ import json
 import os
 import re
 import subprocess
-import traceback
 
 RE_BUNDLE_ID = re.compile(r"^environment-(.*)-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}")
 

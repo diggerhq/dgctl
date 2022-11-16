@@ -3,8 +3,7 @@ import os
 import re
 
 import click
-from utils import popen_to_object
-from commands import InitCommand
+from dgctl.commands import InitCommand
 
 
 @click.group()
@@ -22,6 +21,3 @@ def init(region):
 
 
 cli.add_command(init)
-
-if __name__ == "__main__":
-    cli()

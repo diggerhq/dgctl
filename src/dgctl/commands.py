@@ -1,5 +1,5 @@
-from aws import get_caller_identity, bucket_exists, bucket_create
-from utils import get_bundle_id
+from dgctl.aws import get_caller_identity, bucket_exists, bucket_create
+from dgctl.utils import get_bundle_id
 
 
 class InitCommand:
