@@ -1,6 +1,20 @@
 import json
+import os
+import re
 import subprocess
 import traceback
+
+RE_BUNDLE_ID = re.compile(r"^environment-(.*)-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}")
+
+
+def get_bundle_id():
+    """
+    Parse bundle id from current working directory name.
+    "/home/digger/environment-abc-987-2022-11-16-12-50-15" -> "abc-987"
+    """
+    cwd = os.path.split(os.getcwd())[-1]
+    r = re.match(RE_BUNDLE_ID, cwd)
+    return r.groups()[0]
 
 
 def popen_to_object(exec_array, callable_formatter, **kwargs):
@@ -17,14 +31,9 @@ def popen_to_object(exec_array, callable_formatter, **kwargs):
         if not line:
             break
         if line:
-            try:
-                lines.append(line.strip())
-            except Exception as e:
-                print("** exception occurred during Popen callback")
-                print(traceback.format_exc())
+            lines.append(line.strip())
 
     retcode = proc.poll()
-
-    stdout, stderr = proc.communicate()
+    proc.communicate()
 
     return retcode, callable_formatter("".join(lines))
