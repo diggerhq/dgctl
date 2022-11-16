@@ -18,8 +18,22 @@ This command will create `backend.tf` file.
 
 # Publish
 
+Open pyproject.toml and bump version.
+
+Build package:
 ```
 rm -rf dist
-python3 -m build
-python3 -m twine upload --repository testpypi dist/*
+python -m build
+python -m twine upload --repository testpypi dist/*
+```
+
+Test package on testpypi.org
+```
+python -m twine upload --repository testpypi dist/*
+python -m pip install --index-url https://test.pypi.org/simple/ dgctl==0.1.4
+```
+
+Upload to official pip:
+```
+python -m twine upload dist/*
 ```
