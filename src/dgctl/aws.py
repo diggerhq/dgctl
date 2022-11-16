@@ -1,5 +1,6 @@
 import json
-from utils import popen_to_object
+
+from dgctl.utils import popen_to_object
 
 
 def get_caller_identity():

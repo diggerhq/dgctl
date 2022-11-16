@@ -15,3 +15,11 @@ dgctl init
 ```
 
 This command will create `backend.tf` file.
+
+# Publish
+
+```
+rm -rf dist
+python3 -m build
+python3 -m twine upload --repository testpypi dist/*
+```
