@@ -1,0 +1,27 @@
+import json
+import os
+import re
+
+import click
+from utils import popen_to_object
+from commands import InitCommand
+
+
+@click.group()
+def cli():
+    pass
+
+
+@click.command()
+@click.option("--region", prompt="AWS region", default="us-east-1")
+def init(region):
+    try:
+        InitCommand(region)
+    except RuntimeError as err:
+        raise click.UsageError(err)
+
+
+cli.add_command(init)
+
+if __name__ == "__main__":
+    cli()
