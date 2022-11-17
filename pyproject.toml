@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "dgctl"
-version = "0.0.1"
+version = "0.0.3"
 description = "digger.dev client"
 authors = ["Mohammed Habib <mo@digger.dev>"]
 

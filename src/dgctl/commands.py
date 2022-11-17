@@ -11,9 +11,7 @@ class InitCommand:
         try:
             self.bundle_id = get_bundle_id()
         except:
-            raise RuntimeError(
-                "This script must be called in 'environment-*' directory"
-            )
+            raise RuntimeError("This script must be called in environment directory")
 
         try:
             self.account = get_caller_identity()

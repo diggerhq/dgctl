@@ -3,13 +3,13 @@ import os
 import re
 import subprocess
 
-RE_BUNDLE_ID = re.compile(r"^environment-(.*)-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}")
+RE_BUNDLE_ID = re.compile(r"^(.*)-\d{4}-\d{2}-\d{2}-\d{2}-\d{2}$")
 
 
 def get_bundle_id():
     """
     Parse bundle id from current working directory name.
-    "/home/digger/environment-abc-987-2022-11-16-12-50-15" -> "abc-987"
+    "/home/digger/abc-987-2022-11-16-12-50" -> "abc-987"
     """
     cwd = os.path.split(os.getcwd())[-1]
     r = re.match(RE_BUNDLE_ID, cwd)
