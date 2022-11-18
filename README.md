@@ -24,7 +24,6 @@ Build package:
 ```
 rm -rf dist
 python -m build
-python -m twine upload --repository testpypi dist/*
 ```
 
 Test package on testpypi.org
