@@ -1,5 +1,6 @@
+from dotenv import dotenv_values
+
 from dgctl.aws import get_caller_identity, bucket_exists, bucket_create
-from dgctl.utils import get_bundle_id
 
 
 class InitCommand:
@@ -7,13 +8,14 @@ class InitCommand:
 
     def __init__(self, region):
         self.region = region
+        self.config = dotenv_values(".digger")
 
-        try:
-            self.bundle_id = get_bundle_id()
-        except:
-            raise RuntimeError(
-                "This script must be called in 'environment-*' directory"
-            )
+        if not self.config:
+            raise RuntimeError("File .digger not found")
+
+        self.environment_id = self.config.get("ENVIRONMENT_ID")
+        if not self.environment_id:
+            raise RuntimeError("Missing ENVIRONMENT_ID in .digger file")
 
         try:
             self.account = get_caller_identity()
@@ -49,7 +51,7 @@ terraform {{
   backend "s3" {{
     bucket  = "digger-{self.account_id}"
     encrypt = true
-    key     = "digger/{self.bundle_id}/terraform.tfstate"
+    key     = "digger/{self.environment_id}/terraform.tfstate"
     region  = "{self.region}"
   }}
 }}

@@ -56,20 +56,6 @@ optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7"
 
 [[package]]
-name = "coverage"
-version = "6.5.0"
-description = "Code coverage measurement for Python"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[package.dependencies]
-tomli = {version = "*", optional = true, markers = "python_full_version <= \"3.11.0a6\" and extra == \"toml\""}
-
-[package.extras]
-toml = ["tomli"]
-
-[[package]]
 name = "exceptiongroup"
 version = "1.0.4"
 description = "Backport of PEP 654 (exception groups)"
@@ -146,17 +132,6 @@ python-versions = ">=3.6"
 pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 
 [[package]]
-name = "parameterized"
-version = "0.8.1"
-description = "Parameterized testing with any Python test framework"
-category = "dev"
-optional = false
-python-versions = "*"
-
-[package.extras]
-dev = ["jinja2"]
-
-[[package]]
 name = "pathspec"
 version = "0.10.2"
 description = "Utility library for gitignore style pattern matching of file paths."
@@ -200,14 +175,6 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
-name = "pyfakefs"
-version = "5.0.0"
-description = "pyfakefs implements a fake file system that mocks the Python file system modules."
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[[package]]
 name = "pyflakes"
 version = "2.5.0"
 description = "passive checker of Python programs"
@@ -248,48 +215,15 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "xmlschema"]
 
 [[package]]
-name = "pytest-cov"
-version = "4.0.0"
-description = "Pytest plugin for measuring coverage."
-category = "dev"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-coverage = {version = ">=5.2.1", extras = ["toml"]}
-pytest = ">=4.6"
-
-[package.extras]
-testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtualenv"]
-
-[[package]]
-name = "pytest-django"
-version = "4.5.2"
-description = "A Django plugin for pytest."
-category = "dev"
-optional = false
-python-versions = ">=3.5"
-
-[package.dependencies]
-pytest = ">=5.4.0"
-
-[package.extras]
-docs = ["sphinx", "sphinx-rtd-theme"]
-testing = ["django", "django-configurations (>=2.0)"]
-
-[[package]]
-name = "pytest-mock"
-version = "3.10.0"
-description = "Thin-wrapper around the mock package for easier use with pytest"
-category = "dev"
+name = "python-dotenv"
+version = "0.21.0"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+category = "main"
 optional = false
 python-versions = ">=3.7"
 
-[package.dependencies]
-pytest = ">=5.0"
-
 [package.extras]
-dev = ["pre-commit", "tox", "pytest-asyncio"]
+cli = ["click (>=5.0)"]
 
 [[package]]
 name = "tomli"
@@ -330,14 +264,13 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
-content-hash = "b5efa04a7965c6e7316115081e80ba1487aa2403138e6d7886fde56fe205554d"
+content-hash = "f065eb9094789d98e59cf718ae26563e3975f89f167319d324c45c176690622c"
 
 [metadata.files]
 attrs = []
 black = []
 click = []
 colorama = []
-coverage = []
 exceptiongroup = []
 flake8 = []
 importlib-metadata = []
@@ -345,18 +278,14 @@ iniconfig = []
 mccabe = []
 mypy-extensions = []
 packaging = []
-parameterized = []
 pathspec = []
 platformdirs = []
 pluggy = []
 pycodestyle = []
-pyfakefs = []
 pyflakes = []
 pyparsing = []
 pytest = []
-pytest-cov = []
-pytest-django = []
-pytest-mock = []
+python-dotenv = []
 tomli = []
 typed-ast = []
 typing-extensions = []
