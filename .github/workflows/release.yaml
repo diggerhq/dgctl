@@ -2,7 +2,31 @@ name: Release
 on: [push]
 
 jobs:
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the tag version
+        id: get_version
+        run: echo ::set-output name=version::$(echo $GITHUB_REF | cut -d / -f 3)
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.version.outputs.version }}
+          tag_name: ${{ github.ref }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
   release-ubuntu:
+    needs: create-release
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -17,6 +41,7 @@ jobs:
           ./dist/dgctl/dgctl
 
   release-macos:
+    needs: create-release
     runs-on: macos-latest
     steps:
       - name: Checkout code
@@ -31,6 +56,7 @@ jobs:
           ./dist/dgctl/dgctl
 
   release-windows:
+    needs: create-release
     runs-on: windows-latest
     steps:
       - name: Checkout code
