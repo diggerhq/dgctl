@@ -1,0 +1,114 @@
+name: Release
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get dgctl version
+        id: get_version
+        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
+
+      - name: release
+        uses: actions/create-release@v1
+        id: create_release
+        with:
+          draft: false
+          prerelease: false
+          release_name: "latest"
+          tag_name: ${{ steps.get_version.outputs.version }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  build-osx:
+    needs: create-release
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install dgctl==${{ needs.create-release.outputs.version }}
+          pip install pyinstaller
+          pyinstaller --onedir --onefile --noupx src/dgctl/dgctl.py
+          ./dist/dgctl
+
+      - name: Upload binary to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dgctl-osx
+          path: dist/dgctl
+
+  build-windows:
+    needs: create-release
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          .venv\Scripts\activate
+          pip install dgctl
+          pip install pyinstaller
+          pyinstaller --onedir --onefile --noupx src\dgctl\dgctl.py
+          dist\dgctl
+
+      - name: Upload binary to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dgctl-windows
+          path: dist\dgctl.exe
+
+  release-all:
+    needs: [create-release, build-osx, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: dgctl-osx
+
+      - run: |
+          zip -r dgctl-osx.zip dgctl
+
+      - name: upload osx artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: dgctl-osx.zip
+          asset_name: dgctl-osx.zip
+          asset_content_type: application/gzip
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dgctl-windows
+
+      - run: |
+          zip -r dgctl-windows.zip dgctl.exe
+
+      - name: upload windows artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ needs.create-release.outputs.upload_url }}
+          asset_path: dgctl-windows.zip
+          asset_name: dgctl-windows.zip
+          asset_content_type: application/gzip
