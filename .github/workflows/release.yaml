@@ -42,3 +42,4 @@ jobs:
           pip install dgctl
           pip install pyinstaller
           pyinstaller src\dgctl\dgctl.py
+          dist\dgctl\dgctl
