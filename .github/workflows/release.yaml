@@ -41,7 +41,18 @@ jobs:
           pip install dgctl
           pip install pyinstaller
           pyinstaller src/dgctl/dgctl.py
-          ./dist/dgctl/dgctl
+          cd dist/dgctl
+          zip -r dgctl.zip dgctl
+
+      - name: upload ubuntu artifact
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dgctl.zip
+          asset_name: dgctl-linux.zip
+          asset_content_type: application/gzip
 
   release-macos:
     needs: create-release
