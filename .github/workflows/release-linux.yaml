@@ -11,3 +11,6 @@ jobs:
 
       - run: |
           ls ${{ github.workspace }}
+          ls ${{ github.workspace }}/dist/dgctl
+          ./dist/dgctl/dgctl
+        
