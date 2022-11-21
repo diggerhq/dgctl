@@ -21,3 +21,6 @@ def init(region):
 
 
 cli.add_command(init)
+
+if __name__ == "__main__":
+    cli()
