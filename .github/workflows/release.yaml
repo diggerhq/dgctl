@@ -29,7 +29,7 @@ jobs:
           pyinstaller src/dgctl/dgctl.py
           ./dist/dgctl/dgctl
 
-   release-windows:
+  release-windows:
     runs-on: macos-windows
       - name: Checkout code
         uses: actions/checkout@v3
