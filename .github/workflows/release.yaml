@@ -1,0 +1,41 @@
+name: Release
+on: [push]
+jobs:
+  release-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install dgctl
+          pip install pyinstaller
+          pyinstaller src/dgctl/dgctl.py
+          ./dist/dgctl/dgctl
+
+   release-macos:
+    runs-on: macos-latest
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install dgctl
+          pip install pyinstaller
+          pyinstaller src/dgctl/dgctl.py
+          ./dist/dgctl/dgctl
+
+   release-windows:
+    runs-on: macos-windows
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install dgctl
+          pip install pyinstaller
+          pyinstaller src\dgctl\dgctl.py
