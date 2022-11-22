@@ -1,4 +1,3 @@
-const download = require('download-file')
 const fs = require('fs');
 const child_process = require('child_process')
 const unzipper = require('unzipper')
