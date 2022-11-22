@@ -6,8 +6,13 @@ on:
 
 jobs:
 
-  build-osx:
-    runs-on: macos-latest
+  get-version:
+    name: Get dgctl version
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -16,10 +21,17 @@ jobs:
         id: get_version
         run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
 
+  build-osx:
+    needs: get-version
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
       - run: |
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install dgctl==${{ steps.get_version.outputs.version }}
+          pip install dgctl==${{ needs.get-version.outputs.version }}
           pip install pyinstaller
           pyinstaller --onedir --onefile --noupx src/dgctl/dgctl.py
           ./dist/dgctl
@@ -31,19 +43,16 @@ jobs:
           path: dist/dgctl
 
   build-windows:
+    needs: get-version
     runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get dgctl version
-        id: get_version
-        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
-
       - run: |
           python3 -m venv .venv
           .venv\Scripts\activate
-          pip install dgctl==${{ steps.get_version.outputs.version }}
+          pip install dgctl==${{ needs.get-version.outputs.version }}
           pip install pyinstaller
           pyinstaller --onedir --onefile --noupx src\dgctl\dgctl.py
           dist\dgctl
