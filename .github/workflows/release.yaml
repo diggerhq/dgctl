@@ -24,7 +24,7 @@ jobs:
 
       - name: Update release
         id: create_release
-        uses: johnwbyrd/update-release@v1
+        uses: johnwbyrd/update-release
         with:
           release: "latest"
           tag: ${{ steps.get_version.outputs.version }}
