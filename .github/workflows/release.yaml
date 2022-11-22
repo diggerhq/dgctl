@@ -1,8 +1,8 @@
 name: Release
 on:
   push:
-    branches:
-      - "master"
+#    branches:
+#      - "master"
 
 jobs:
 
@@ -27,7 +27,7 @@ jobs:
         id: create_release
         with:
           draft: false
-          prerelease: false
+          prerelease: true
           release_name: "latest"
           tag_name: ${{ steps.get_version.outputs.version }}
         env:
