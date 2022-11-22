@@ -5,41 +5,21 @@ on:
 #      - "master"
 
 jobs:
-      - name: Get dgctl version
-        id: get_version
-        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
-
-      - name: Update release
-        id: create_release
-        uses: IsaacShelton/update-existing-release@v1.3.1
-        with:
-          release: "latest"
-          tag: ${{ steps.get_version.outputs.version }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          replace: true
-
-#      - name: release
-#        uses: actions/create-release@v1
-#        id: create_release
-#        with:
-#          draft: false
-#          prerelease: true
-#          release_name: "latest"
-#          tag_name: ${{ steps.get_version.outputs.version }}
-#        env:
-#          GITHUB_TOKEN: ${{ github.token }}
 
   build-osx:
-    needs: create-release
     runs-on: macos-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get dgctl version
+        id: get_version
+        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
+
       - run: |
           python3 -m venv .venv
           source .venv/bin/activate
-          pip install dgctl==${{ needs.create-release.outputs.version }}
+          pip install dgctl==${{ steps.get_version.outputs.version }}
           pip install pyinstaller
           pyinstaller --onedir --onefile --noupx src/dgctl/dgctl.py
           ./dist/dgctl
@@ -51,16 +31,19 @@ jobs:
           path: dist/dgctl
 
   build-windows:
-    needs: create-release
     runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Get dgctl version
+        id: get_version
+        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
+
       - run: |
           python3 -m venv .venv
           .venv\Scripts\activate
-          pip install dgctl
+          pip install dgctl==${{ steps.get_version.outputs.version }}
           pip install pyinstaller
           pyinstaller --onedir --onefile --noupx src\dgctl\dgctl.py
           dist\dgctl
@@ -72,7 +55,7 @@ jobs:
           path: dist\dgctl.exe
 
   release-all:
-    needs: [create-release, build-osx, build-windows]
+    needs: [build-osx, build-windows]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
