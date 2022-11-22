@@ -5,30 +5,18 @@ on:
 #      - "master"
 
 jobs:
-
-  create-release:
-    name: Create Release
-    runs-on: ubuntu-latest
-
-    outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
-      version: ${{ steps.get_version.outputs.version }}
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Get dgctl version
         id: get_version
         run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
 
       - name: Update release
         id: create_release
-        uses: johnwbyrd/update-release
+        uses: IsaacShelton/update-existing-release@v1.3.1
         with:
           release: "latest"
           tag: ${{ steps.get_version.outputs.version }}
           token: ${{ secrets.GITHUB_TOKEN }}
+          replace: true
 
 #      - name: release
 #        uses: actions/create-release@v1
@@ -94,16 +82,6 @@ jobs:
       - run: |
           zip -r dgctl-osx.zip dgctl
 
-      - name: upload osx artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: dgctl-osx.zip
-          asset_name: dgctl-osx.zip
-          asset_content_type: application/gzip
-
       - uses: actions/download-artifact@v3
         with:
           name: dgctl-windows
@@ -111,12 +89,16 @@ jobs:
       - run: |
           zip -r dgctl-windows.zip dgctl.exe
 
-      - name: upload windows artifact
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Get dgctl version
+        id: get_version
+        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
+
+      - uses: IsaacShelton/update-existing-release@v1.3.1
         with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: dgctl-windows.zip
-          asset_name: dgctl-windows.zip
-          asset_content_type: application/gzip
+          token: ${{ github.token }}
+          release: "latest"
+          tag: ${{ steps.get_version.outputs.version }}
+          replace: true
+          files: >
+            dgctl-osx.zip
+            dgctl-windows.zip
