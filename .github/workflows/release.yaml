@@ -64,7 +64,7 @@ jobs:
           path: dist\dgctl.exe
 
   release-all:
-    needs: [build-osx, build-windows]
+    needs: [get-version, build-osx, build-windows]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v3
@@ -81,15 +81,11 @@ jobs:
       - run: |
           zip -r dgctl-windows.zip dgctl.exe
 
-      - name: Get dgctl version
-        id: get_version
-        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
-
       - uses: IsaacShelton/update-existing-release@v1.3.1
         with:
           token: ${{ github.token }}
           release: "latest"
-          tag: ${{ steps.get_version.outputs.version }}
+          tag: ${{ needs.get_version.outputs.version }}
           replace: true
           files: >
             dgctl-osx.zip
