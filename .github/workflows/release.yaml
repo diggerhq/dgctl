@@ -1,8 +1,8 @@
 name: Release
 on:
   push:
-    branches:
-      - "master"
+#    branches:
+#      - "master"
 
 jobs:
 
@@ -85,7 +85,7 @@ jobs:
         with:
           token: ${{ github.token }}
           release: "latest"
-          tag: ${{ needs.get_version.outputs.version }}
+          tag: "latest-release"
           replace: true
           files: >
             dgctl-osx.zip
