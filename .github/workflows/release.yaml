@@ -22,16 +22,24 @@ jobs:
         id: get_version
         run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
 
-      - name: release
-        uses: actions/create-release@v1
+      - name: Update release
         id: create_release
+        uses: johnwbyrd/update-release@v1
         with:
-          draft: false
-          prerelease: true
-          release_name: "latest"
-          tag_name: ${{ steps.get_version.outputs.version }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+          release: "latest"
+          tag: ${{ steps.get_version.outputs.version }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+#      - name: release
+#        uses: actions/create-release@v1
+#        id: create_release
+#        with:
+#          draft: false
+#          prerelease: true
+#          release_name: "latest"
+#          tag_name: ${{ steps.get_version.outputs.version }}
+#        env:
+#          GITHUB_TOKEN: ${{ github.token }}
 
   build-osx:
     needs: create-release
