@@ -1,0 +1,33 @@
+{
+  "name": "dgctl",
+  "version": "0.0.1",
+  "description": "dgctl tool for digger.dev",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "node install.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/diggerhq/dgctl.git"
+  },
+  "bin": {
+    "dgctl": "./digger/dg/dg"
+  },
+  "keywords": [
+    "aws",
+    "gcp",
+    "digger",
+    "dgctl"
+  ],
+  "author": "Mohamed Habib",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/diggerhq/dgctl/issues"
+  },
+  "homepage": "https://github.com/diggerhq/dgctl/dgctl-npm#readme",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "unzipper": "^0.10.11"
+  }
+}
