@@ -1,0 +1,93 @@
+name: Release
+on:
+  push:
+    branches:
+      - "master"
+
+jobs:
+
+  get-version:
+    name: Get dgctl version
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get dgctl version
+        id: get_version
+        run: echo ::set-output name=version::$(grep version pyproject.toml | sed "s/version//g" | tr -d ' =\"')
+
+  build-osx:
+    needs: get-version
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          source .venv/bin/activate
+          pip install dgctl==${{ needs.get-version.outputs.version }}
+          pip install pyinstaller
+          pyinstaller --onedir --onefile --noupx src/dgctl/dgctl.py
+          ./dist/dgctl
+
+      - name: Upload binary to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dgctl-osx
+          path: dist/dgctl
+
+  build-windows:
+    needs: get-version
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - run: |
+          python3 -m venv .venv
+          .venv\Scripts\activate
+          pip install dgctl==${{ needs.get-version.outputs.version }}
+          pip install pyinstaller
+          pyinstaller --onedir --onefile --noupx src\dgctl\dgctl.py
+          dist\dgctl
+
+      - name: Upload binary to artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dgctl-windows
+          path: dist\dgctl.exe
+
+  release-all:
+    needs: [get-version, build-osx, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+        with:
+          name: dgctl-osx
+
+      - run: |
+          zip -r dgctl-osx.zip dgctl
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: dgctl-windows
+
+      - run: |
+          zip -r dgctl-windows.zip dgctl.exe
+
+      - uses: IsaacShelton/update-existing-release@v1.3.1
+        with:
+          token: ${{ github.token }}
+          release: "latest"
+          tag: "latest-release"
+          replace: true
+          files: >
+            dgctl-osx.zip
+            dgctl-windows.zip
+
