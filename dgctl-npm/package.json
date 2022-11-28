@@ -1,6 +1,6 @@
 {
   "name": "dgctl",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "dgctl tool for digger.dev",
   "main": "index.js",
   "scripts": {
