@@ -1,6 +1,6 @@
 {
   "name": "dgctl",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "dgctl tool for digger.dev",
   "main": "index.js",
   "scripts": {
@@ -12,7 +12,7 @@
     "url": "git+https://github.com/diggerhq/dgctl.git"
   },
   "bin": {
-    "dgctl": "./digger/dg/dg"
+    "dgctl": "dgctl"
   },
   "keywords": [
     "aws",

@@ -50,7 +50,7 @@ async function downloadBinaryFromGithub(platform) {
 
 async function installFromPip() {
     console.log(`Installing dgctl from Python Package Repository`)
-    child_process.execSync(`python -m pip install dgctl`)
+    child_process.execSync(`python3 -m pip install dgctl`)
 }
 
 async function main() {
